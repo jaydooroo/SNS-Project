@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation 'software.amazon.awssdk:dynamodb-enhanced:2.18.18'
+    implementation 'com.amazonaws:aws-java-sdk-core:1.12.344'
+    implementation 'com.google.inject:guice:5.0.1'
+}
