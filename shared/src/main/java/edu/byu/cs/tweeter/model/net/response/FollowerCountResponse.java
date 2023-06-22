@@ -6,7 +6,7 @@ public class FollowerCountResponse extends Response {
 
     protected int count;
 
-    FollowerCountResponse(String message) {
+    public FollowerCountResponse(String message) {
         super(false, message);
     }
 

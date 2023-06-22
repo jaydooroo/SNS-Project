@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
-import edu.byu.cs.tweeter.client.model.service.FollowService;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
@@ -29,8 +28,8 @@ public class GetFollowingTask extends PagedUserTask {
     protected PagedResponse getResponse() throws IOException, TweeterRemoteException {
 
 
-            String targetUserAlias = getTargetUser() == null ? null : getTargetUser().getAlias();
-            String lastFolloweeAlias = getLastItem() == null ? null : getLastItem().getAlias();
+            String targetUserAlias = getTargetUser() == null ? null : getTargetUser().getUser_alias();
+            String lastFolloweeAlias = getLastItem() == null ? null : getLastItem().getUser_alias();
 
             FollowingRequest request = new FollowingRequest(authToken, targetUserAlias, limit, lastFolloweeAlias);
             FollowingResponse response = getServerFacade().getFollowees(request, URL_PATH);

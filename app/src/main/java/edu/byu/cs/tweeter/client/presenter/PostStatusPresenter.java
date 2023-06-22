@@ -24,7 +24,7 @@ public class PostStatusPresenter extends Presenter {
         this.statusService = getStatusService();
     }
 
-    protected StatusService getStatusService() {
+    public StatusService getStatusService() {
         if(statusService == null) {
             statusService = new StatusService();
         }
@@ -39,9 +39,12 @@ public class PostStatusPresenter extends Presenter {
         getView().displayPostToast("Posting Status...");
 
         try {
+
             Status newStatus = new Status(post, currUser, getFormattedDateTime(), parseURLs(post), parseMentions(post));
-             getStatusService().initiatePostStatus(currUserAuthToken,newStatus,new PostStatusObserver());
+            getStatusService().initiatePostStatus(currUserAuthToken,newStatus,new PostStatusObserver());
+
         } catch (Exception ex) {
+
             Log.e(LOG_TAG, ex.getMessage(), ex);
             getView().displayMessage("Failed to post the status because of exception: " + ex.getMessage());
 

@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.client.R;
-import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.presenter.StoryPresenter;
 import edu.byu.cs.tweeter.client.view.main.MainActivity;
 import edu.byu.cs.tweeter.client.view.view_interface.StoryView;
@@ -174,7 +173,7 @@ public class StoryFragment extends Fragment implements StoryView {
          */
         void bindStatus(Status status) {
             Picasso.get().load(status.getUser().getImageUrl()).into(userImage);
-            userAlias.setText(status.getUser().getAlias());
+            userAlias.setText(status.getUser().getUser_alias());
             userName.setText(status.getUser().getName());
             datetime.setText(status.getDate());
 

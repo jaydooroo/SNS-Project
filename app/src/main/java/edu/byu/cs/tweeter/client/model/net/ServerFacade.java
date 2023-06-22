@@ -40,7 +40,7 @@ public class ServerFacade {
 
     // TODO: Set this to the invoke URL of your API. Find it by going to your API in AWS, clicking
     //  on stages in the right-side menu, and clicking on the stage you deployed your API to.
-    private static final String SERVER_URL = "https://t9n0boumt9.execute-api.us-west-2.amazonaws.com/last";
+    private static final String SERVER_URL = "https://t9n0boumt9.execute-api.us-west-2.amazonaws.com/thelast";
 
     private final ClientCommunicator clientCommunicator = new ClientCommunicator(SERVER_URL);
 
@@ -119,7 +119,8 @@ public class ServerFacade {
     }
 
     public IsFollowerResponse isFollower(IsFollowerRequest request, String urlPath) throws IOException, TweeterRemoteException {
-        return clientCommunicator.doPost(urlPath, request, null, IsFollowerResponse.class);
+       IsFollowerResponse response =   clientCommunicator.doPost(urlPath, request, null, IsFollowerResponse.class);
+       return response;
     }
 
 }

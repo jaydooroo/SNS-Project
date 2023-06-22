@@ -21,16 +21,22 @@ import edu.byu.cs.tweeter.model.domain.User;
 public class UserService {
 
     public interface AuthenticationObserver extends ServiceObserver {
+
         void handleSuccess(User user,AuthToken authToken);
+
     }
 
 
     public interface GetUserObserver extends ServiceObserver{
-        void handleSuccess(User user);;
+
+        void handleSuccess(User user);
+
     }
 
     public interface LogoutObserver extends ServiceObserver {
+
         void handleSuccess();
+
     }
 
 
@@ -40,6 +46,7 @@ public class UserService {
 
         // Send the login request. // service
         new BaseTaskService(new LoginTask(username, password, new AuthenticationHandler(observer))).runExecutor();
+
     }
 
     public void register(String firstName, String lastName, String alias, String password, ImageView imageToUpload, AuthenticationObserver observer) {
@@ -71,13 +78,13 @@ public class UserService {
 
     private class AuthenticationHandler extends BackgroundTaskHandler<AuthenticationObserver> {
 
-
         public AuthenticationHandler(AuthenticationObserver observer) {
             super(observer);
         }
 
         @Override
         protected void handleSuccessMessage(AuthenticationObserver observer, Bundle data) {
+
             User authenticatedUser = (User) data.getSerializable(LoginTask.USER_KEY);
             AuthToken authToken = (AuthToken) data.getSerializable(LoginTask.AUTH_TOKEN_KEY);
 

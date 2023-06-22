@@ -2,18 +2,14 @@ package edu.byu.cs.tweeter.client.model.service.backgroundTask;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.Random;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
 import edu.byu.cs.tweeter.model.net.request.IsFollowerRequest;
-import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.IsFollowerResponse;
 
 /**
@@ -54,7 +50,7 @@ public class IsFollowerTask extends AuthenticatedTask {
             IsFollowerResponse response =  getServerFacade().isFollower(request, URL_PATH);
 
             if(response.isSuccess()) {
-                this.isFollower = response.isFollower();
+                this.isFollower = response.isGetIsFollower();
                 sendSuccessMessage();
             }
             else {

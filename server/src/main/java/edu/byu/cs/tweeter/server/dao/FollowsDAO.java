@@ -2,6 +2,7 @@ package edu.byu.cs.tweeter.server.dao;
 
 import java.util.List;
 
+import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Follow;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.FollowRequest;
@@ -21,38 +22,22 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
-public abstract class FollowsDAO extends DAO {
+public interface FollowsDAO {
 
-    DynamoDbTable<Follow> followTable;
 
-    public FollowsDAO(ProfileCredentialsProvider credentialsProvider, Region region) {
-        super(credentialsProvider, region);
-
-    }
-
-    public abstract FollowersResponse getFollowers(FollowersRequest request);
 
     public abstract Integer getFollowersCount(User followee);
     public abstract Integer getFolloweeCount(User follower);
 
-    public abstract FollowingResponse getFollowees(FollowingRequest request);
+    public abstract FollowersResponse getFollowers(String followerAlias, int limit, String lastFolloweeAlias);
+    public abstract FollowingResponse getFollowees(String followerAlias, int limit, String lastFolloweeAlias);
 
-    public abstract FollowResponse follow(FollowRequest request);
-    public abstract UnfollowResponse unfollow(UnfollowRequest request);
+    public abstract FollowResponse follow(User followee, AuthToken authToken);
+    public abstract UnfollowResponse unfollow(User followee, AuthToken authToken);
 
-    public abstract IsFollowerResponse isFollower(IsFollowerRequest request);
+    public abstract IsFollowerResponse isFollower(User follower, User followee );
+    public abstract List<Follow> getUnlimitedFollowers (String followee_alias);
+    public abstract List<Follow> getUnlimitedFollowees (String follower_alias);
 
-
-    @Override
-    protected void connectTable() {
-        if(this.followTable == null) {
-            this.followTable = enhancedClient.table("follows", TableSchema.fromBean(Follow.class));
-        }
-    }
-
-    @Override
-    protected void disconnectTable() {
-        this.followTable = null;
-    }
 
 }

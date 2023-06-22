@@ -63,7 +63,7 @@ public class FacadeTest {
 
 
         FollowersResponse expectedResponse = new FollowersResponse(true,FakeData.getInstance().getFakeUsers().subList(0,10));
-        FollowersRequest request = new FollowersRequest(this.currentAuthToken,currentUser.getAlias(),10,null);
+        FollowersRequest request = new FollowersRequest(this.currentAuthToken,currentUser.getUser_alias(),10,null);
         try {
             FollowersResponse response = serverFacade.getFollowers(request, "/getfollowers");
             Assertions.assertEquals(expectedResponse,response);

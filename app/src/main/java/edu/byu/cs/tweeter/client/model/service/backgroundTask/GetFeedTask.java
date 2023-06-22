@@ -7,15 +7,12 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.byu.cs.tweeter.client.model.net.ServerFacade;
-import edu.byu.cs.tweeter.client.model.service.FollowService;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
 import edu.byu.cs.tweeter.model.net.request.FeedRequest;
-import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FeedResponse;
-import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.model.net.response.PagedResponse;
 import edu.byu.cs.tweeter.util.Pair;
 
@@ -32,7 +29,7 @@ public class GetFeedTask extends PagedStatusTask {
     @Override
     protected PagedResponse getResponse() throws IOException, TweeterRemoteException {
 
-        String targetUserAlias = getTargetUser() == null ? null : getTargetUser().getAlias();
+        String targetUserAlias = getTargetUser() == null ? null : getTargetUser().getUser_alias();
         Status lastFeed = getLastItem() == null ? null : getLastItem();
 
         FeedRequest request = new FeedRequest(authToken, targetUserAlias, limit, lastFeed);

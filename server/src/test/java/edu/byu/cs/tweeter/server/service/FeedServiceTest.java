@@ -15,7 +15,6 @@ import edu.byu.cs.tweeter.model.net.request.FeedRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FeedResponse;
 import edu.byu.cs.tweeter.server.dao.FeedDAODynamo;
-import edu.byu.cs.tweeter.server.dao.FollowingDAODynamo;
 
 public class FeedServiceTest {
     private FeedRequest request;
@@ -53,13 +52,13 @@ public class FeedServiceTest {
 
         // Setup a request object to use in the tests
 
-        request = new FeedRequest(authToken,currentUser.getAlias(),3,resultStatus1);
+        request = new FeedRequest(authToken,currentUser.getUser_alias(),3,resultStatus1);
         expectedResponse = new FeedResponse(true,items );
 //        request = new FollowingRequest(authToken, currentUser.getAlias(), 3, null);
 
         // Setup a mock FollowDAO that will return known responses
         mockFeedDAODynamo = Mockito.mock(FeedDAODynamo.class);
-        Mockito.when(mockFeedDAODynamo.getFeeds(request)).thenReturn(expectedResponse);
+//        Mockito.when(mockFeedDAODynamo.getFeeds(request.getTargetUserAlias(),request.getLimit(), request.getLastFeed())).thenReturn(expectedResponse);
 
         statusServiceSpy = Mockito.spy(StatusService.class);
         Mockito.when(statusServiceSpy.getFeedDao()).thenReturn(mockFeedDAODynamo);
@@ -67,7 +66,7 @@ public class FeedServiceTest {
 
     /**
      * Verify that the {@link FollowService#getFollowees(FollowingRequest)}
-     * method returns the same result as the {@link FollowingDAODynamo} class.
+     * method returns the same result as the {@link edu.byu.cs.tweeter.server.dao.FollowsDAODynamo} class.
      */
     @Test
     public void testGetFollowees_validRequest_correctResponse() {

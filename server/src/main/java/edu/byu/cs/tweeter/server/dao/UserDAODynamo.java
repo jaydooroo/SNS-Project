@@ -7,45 +7,119 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Base64;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.GetUserRequest;
-import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.request.LogoutRequest;
-import edu.byu.cs.tweeter.model.net.request.RegisterRequest;
 import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
-import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
-import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
 import edu.byu.cs.tweeter.util.FakeData;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.GetItemEnhancedRequest;
 
-public class UserDAODynamo implements UserDAO {
+public class UserDAODynamo extends DynamoDAO implements UserDAO{
+    public static final String BUCKET_NAME = "tweeterimages340";
+    public static final String MIME_TYPE = "image/jpg";
 
-    public LoginResponse login(LoginRequest request) {
+    DynamoDbTable<User> userTable;
 
-        User user = getDummyUser();
-        AuthToken authToken = getDummyAuthToken();
+//    @Inject
+//    public UserDAODynamo( ProfileCredentialsProvider credentialsProvider,@Named("DynamoDBRegion") Region region) {
+//        super(credentialsProvider, region);
+//    }
 
-        return new LoginResponse(user, authToken);
+
+    @Override
+    public LoginResponse login(String username, String password) {
+
+        connectDB();
+
+
+        Key key = Key.builder().partitionValue(username).build();
+
+        User result = userTable.getItem((GetItemEnhancedRequest.Builder requestBuilder) -> requestBuilder.key(key));
+
+        if(!result.comparePassword(password)) {
+            disconnectDB();
+            return new LoginResponse("Wrong Password");
+        }
+
+        AuthToken authToken = new AuthToken(username);
+
+        disconnectDB();
+
+        return new LoginResponse(result, authToken);
     }
 
-    public RegisterResponse register(RegisterRequest request) {
-        User user = getDummyUser();
-        AuthToken authToken = getDummyAuthToken();
+    @Override
+    public User register(String firstName, String lastName, String image, String username, String password) {
 
-        return new RegisterResponse(user, authToken);
+        connectDB();
+
+        byte[] inputByte = Base64.getDecoder().decode(image.getBytes());
+        InputStream inputImage = new ByteArrayInputStream(inputByte);
+
+        String url =  uploadFile(BUCKET_NAME, username,inputImage,inputByte.length, MIME_TYPE);
+
+        if(url == null) {
+            disconnectDB();
+            throw new RuntimeException("[Server Error] Failed to upload Image");
+
+        }
+
+        User user = new User(firstName,lastName,username,url,password);
+
+//        user.setUser_alias(username);
+//        user.setFirstName(firstName);
+//        user.setImageUrl(image);
+//        user.setLastName(lastName);
+
+        this.userTable.putItem(user);
+
+
+        disconnectDB();
+
+        return user;
     }
 
-    public LogoutResponse logout(LogoutRequest request) {
 
-        return new LogoutResponse(true);
+
+    public boolean logout(LogoutRequest request) {
+
+        return true;
     }
 
-    public GetUserResponse getUser(GetUserRequest request) {
-        User user = getFakeData().findUserByAlias(request.getAlias());
-        return new GetUserResponse(user);
+    public GetUserResponse getUser(String alias) {
+
+//        User user = getFakeData().findUserByAlias(alias);
+
+        try {
+            connectDB();
+
+            Key key = Key.builder()
+                    .partitionValue(alias)
+                    .build();
+
+            User user = this.userTable.getItem(key);
+
+
+            if(user != null && user.getUser_alias().equals(alias)) {
+                return new GetUserResponse(user);
+            }
+
+            disconnectDB();
+            return new GetUserResponse("User: " + alias + " does not exist");
+        } catch (Exception e) {
+            e.printStackTrace();
+            disconnectDB();
+            return new GetUserResponse(e.getMessage());
+        }
     }
 
 
@@ -81,7 +155,7 @@ public class UserDAODynamo implements UserDAO {
 
     }
 
-    public boolean uploadFile(String bucketName,
+    public String uploadFile(String bucketName,
                               String keyName,//filename,
                               InputStream content, // image decode into byte array convert it into input stream.
                               long contentLength, //size
@@ -96,14 +170,25 @@ public class UserDAODynamo implements UserDAO {
             s3.putObject(new PutObjectRequest(bucketName, keyName, content, metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
+            return s3.getUrl(bucketName,keyName).toString();
 
-            return true;
             //rather return string
         } catch (AmazonServiceException e) {
             System.out.println(e.getErrorMessage());
             e.printStackTrace();
-            return false;
+            return null;
             //rather return null        }
         }
+    }
+
+
+    protected void connectTable(){
+        if(this.userTable == null) {
+            this.userTable = enhancedClient.table("user", TableSchema.fromBean(User.class));
+        }
+    }
+
+    protected void disconnectTable(){
+        this.userTable = null;
     }
 }

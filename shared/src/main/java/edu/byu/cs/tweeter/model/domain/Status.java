@@ -4,10 +4,18 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
+
 /**
  * Represents a status (or tweet) posted by a user.
  */
+
+@DynamoDbBean
 public class Status implements Serializable {
+
+    public String user_alias;
     /**
      * Text for the status.
      */
@@ -19,7 +27,7 @@ public class Status implements Serializable {
     /**
      * String representation of the date/time at which the status was sent.
      */
-    public String datetime;
+    public String timestamp;
     /**
      * URLs contained in the post text.
      */
@@ -32,10 +40,20 @@ public class Status implements Serializable {
     public Status() {
     }
 
-    public Status(String post, User user, String datetime, List<String> urls, List<String> mentions) {
+    public Status(String post, User user, String timestamp, List<String> urls, List<String> mentions) {
+        this.user_alias = "No Alias";
         this.post = post;
         this.user = user;
-        this.datetime = datetime;
+        this.timestamp = timestamp;
+        this.urls = urls;
+        this.mentions = mentions;
+    }
+
+    public Status(String user_alias, String post, User user, String timestamp, List<String> urls, List<String> mentions) {
+        this.user_alias = user_alias;
+        this.post = post;
+        this.user = user;
+        this.timestamp = timestamp;
         this.urls = urls;
         this.mentions = mentions;
     }
@@ -49,7 +67,7 @@ public class Status implements Serializable {
     }
 
     public String getDate() {
-        return datetime;
+        return timestamp;
     }
 
     public String getPost() {
@@ -78,18 +96,50 @@ public class Status implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(post, user, datetime, mentions, urls);
+        return Objects.hash(post, user, timestamp, mentions, urls);
+    }
+
+
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    @DynamoDbSortKey
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public void setMentions(List<String> mentions) {
+        this.mentions = mentions;
+    }
+
+    @DynamoDbPartitionKey
+    public String getUser_alias() {
+        return user_alias;
+    }
+
+    public void setUser_alias(String user_alias) {
+        this.user_alias = user_alias;
     }
 
     @Override
     public String toString() {
         return "Status{" +
-                "post='" + post + '\'' +
+                "user_alias='" + user_alias + '\'' +
+                ", post='" + post + '\'' +
                 ", user=" + user +
-                ", datetime=" + datetime +
-                ", mentions=" + mentions +
+                ", timestamp='" + timestamp + '\'' +
                 ", urls=" + urls +
+                ", mentions=" + mentions +
                 '}';
     }
-
 }

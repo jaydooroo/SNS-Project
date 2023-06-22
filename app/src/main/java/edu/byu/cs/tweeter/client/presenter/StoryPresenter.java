@@ -21,7 +21,7 @@ public class StoryPresenter extends PagedPresenter<Status> {
 
    @Override
    void getItems(AuthToken authToken, User targetUser, int PAGE_SIZE, Status lastItem) {
-      service.loadMoreStoryItems(Cache.getInstance().getCurrUserAuthToken(), targetUser, PAGE_SIZE, lastItem, new PagedObserver());
+      service.loadMoreStoryItems(Cache.getInstance().getCurrUserAuthToken(), targetUser, PAGE_SIZE, lastItem, getObserver());
    }
 
    @Override
@@ -35,6 +35,9 @@ public class StoryPresenter extends PagedPresenter<Status> {
    }
 
 
+   public edu.byu.cs.tweeter.client.model.service.observer.PagedObserver<Status> getObserver() {
+      return new PagedObserver();
+   }
 
 
 }

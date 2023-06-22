@@ -4,15 +4,19 @@ import java.util.Objects;
 
 public class IsFollowerResponse extends Response{
 
-    private boolean isFollower;
+    public boolean isGetIsFollower() {
+        return getIsFollower;
+    }
+
+    private boolean getIsFollower;
 
 
     public IsFollowerResponse(boolean isFollower) {
         super(true);
-        this.isFollower = isFollower;
+        this.getIsFollower = isFollower;
     }
 
-    IsFollowerResponse(String message) {
+    public IsFollowerResponse(String message) {
         super(false, message);
     }
 
@@ -21,19 +25,16 @@ public class IsFollowerResponse extends Response{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         IsFollowerResponse that = (IsFollowerResponse) o;
-        return isFollower == that.isFollower;
+        return getIsFollower == that.getIsFollower;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isFollower);
+        return Objects.hash(getIsFollower);
     }
 
-    public boolean isFollower() {
-        return isFollower;
-    }
 
-    public void setFollower(boolean follower) {
-        isFollower = follower;
+    public void setGetIsFollower(boolean getIsFollower) {
+        this.getIsFollower = getIsFollower;
     }
 }

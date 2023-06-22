@@ -121,11 +121,11 @@ public class FakeData {
             for (int j = 0; j < fakeUsers.size(); ++j) {
                 User sender = fakeUsers.get(j);
                 User mention = ((j < fakeUsers.size() - 1) ? fakeUsers.get(j + 1) : fakeUsers.get(0));
-                List<String> mentions = Collections.singletonList(mention.getAlias());
+                List<String> mentions = Collections.singletonList(mention.getUser_alias());
                 String url = "https://byu.edu";
                 List<String> urls = Collections.singletonList(url);
                 String post = "Post " + i + " " + j +
-                        "\nMy friend " + mention.getAlias() + " likes this website" +
+                        "\nMy friend " + mention.getUser_alias() + " likes this website" +
                         "\n" + url;
                 calendar.add(Calendar.MINUTE, 1);
                 String datetime = calendar.getTime().toString();
@@ -152,7 +152,7 @@ public class FakeData {
     public User findUserByAlias(String alias) {
         List<User> fakeUsers = getFakeUsers();
         for (User u : fakeUsers) {
-            if (u.getAlias().equals(alias)) {
+            if (u.getUser_alias().equals(alias)) {
                 return u;
             }
         }
@@ -177,7 +177,7 @@ public class FakeData {
         if (lastUser != null) {
             for (int i = 0; i < fakeUsers.size(); ++i) {
                 User curUser = fakeUsers.get(i);
-                if (curUser.getAlias().equals(lastUser.getAlias())) {
+                if (curUser.getUser_alias().equals(lastUser.getUser_alias())) {
                     index = i + 1;
                     break;
                 }
@@ -186,7 +186,7 @@ public class FakeData {
 
         for (int count = 0; index < fakeUsers.size() && count < limit; ++count, ++index) {
             User curUser = fakeUsers.get(index);
-            if (omit == null || !curUser.getAlias().equals(omit.getAlias())) {
+            if (omit == null || !curUser.getUser_alias().equals(omit.getUser_alias())) {
                 result.getFirst().add(curUser);
             }
         }
@@ -214,7 +214,7 @@ public class FakeData {
         if (lastStatus != null) {
             for (int i = 0; i < fakeStatuses.size(); ++i) {
                 Status curStatus = fakeStatuses.get(i);
-                if (curStatus.getUser().getAlias().equals(lastStatus.getUser().getAlias()) &&
+                if (curStatus.getUser().getUser_alias().equals(lastStatus.getUser().getUser_alias()) &&
                         curStatus.getDate().equals(lastStatus.getDate())) {
                     index = i + 1;
                     break;

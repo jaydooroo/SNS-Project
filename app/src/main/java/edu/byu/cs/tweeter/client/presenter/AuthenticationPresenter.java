@@ -12,7 +12,7 @@ public abstract class AuthenticationPresenter extends Presenter {
         super(view);
     }
 
-    protected AuthenticationView getView() {
+    public AuthenticationView getView() {
         return (AuthenticationView)this.view;
     }
 
@@ -44,6 +44,7 @@ public abstract class AuthenticationPresenter extends Presenter {
             getView().clearMessage();
             getView().displayErrorMessage( "Failed to "+ getDescription() +" because of exception: " + exception.getMessage());
         }
+
     }
 
 }

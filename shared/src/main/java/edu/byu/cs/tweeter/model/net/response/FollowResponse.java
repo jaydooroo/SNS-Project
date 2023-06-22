@@ -7,7 +7,7 @@ public class FollowResponse extends Response {
         super(success);
     }
 
-    FollowResponse( String message) {
+    public FollowResponse( String message) {
         super(false, message);
     }
 }

@@ -12,7 +12,6 @@ public class AuthenticateResponse extends Response {
     }
 
     protected User user;
-
     protected AuthToken authToken;
 
     public AuthenticateResponse(boolean success, String message, User user, AuthToken authToken) {

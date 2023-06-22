@@ -5,6 +5,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 
+import edu.byu.cs.tweeter.server.dao.AuthDAO;
+import edu.byu.cs.tweeter.server.dao.AuthDAODynamo;
 import edu.byu.cs.tweeter.server.dao.FeedDAO;
 import edu.byu.cs.tweeter.server.dao.FeedDAODynamo;
 //import edu.byu.cs.tweeter.server.dao.FollowingDAO;
@@ -21,7 +23,7 @@ import software.amazon.awssdk.regions.Region;
 
 public class DynamoModule extends AbstractModule {
     ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();
-    Region region = Region.US_EAST_1;
+    Region region = Region.US_WEST_2;
 
 
     @Override
@@ -31,19 +33,20 @@ public class DynamoModule extends AbstractModule {
         bind(FollowsDAO.class).to(FollowsDAODynamo.class);
         bind(StoryDAO.class).to(StoryDAODynamo.class);
         bind(UserDAO.class).to(UserDAODynamo.class);
+        bind(AuthDAO.class).to(AuthDAODynamo.class);
     }
 
 
-    @Provides
-    @Named("DynamoDBRegion")
-    public Region dynamodbRegion() {
-        return this.region;
-    }
-
-    @Provides
-    @Named("DynamoDbCredential")
-    public ProfileCredentialsProvider dynamoCredential() {
-        return this.credentialsProvider;
-    }
+//    @Provides
+//    @Named("DynamoDBRegion")
+//    public Region dynamodbRegion() {
+//        return this.region;
+//    }
+//
+////    @Provides
+////    @Named("DynamoDbCredential")
+////    public ProfileCredentialsProvider dynamoCredential() {
+////        return this.credentialsProvider;
+////    }
 
 }

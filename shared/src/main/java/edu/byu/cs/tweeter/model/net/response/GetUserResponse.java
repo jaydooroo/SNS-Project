@@ -13,7 +13,7 @@ public class GetUserResponse extends Response{
         this.user = user;
     }
 
-    GetUserResponse( String message) {
+    public GetUserResponse( String message) {
         super(false, message);
     }
 

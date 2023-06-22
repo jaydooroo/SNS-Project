@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.client.R;
-import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.presenter.FollowersPresenter;
 import edu.byu.cs.tweeter.client.view.main.MainActivity;
 import edu.byu.cs.tweeter.client.view.view_interface.FollowersView;
@@ -160,7 +159,7 @@ public class FollowersFragment extends Fragment implements FollowersView{
         void bindUser(User user) {
             if (user == null)
                 Log.e(LOG_TAG, "user is null!");
-            userAlias.setText(user.getAlias());
+            userAlias.setText(user.getUser_alias());
             userName.setText(user.getName());
 
             Picasso.get().load(user.getImageUrl()).into(userImage);

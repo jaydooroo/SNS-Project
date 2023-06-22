@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.byu.cs.client.R;
-import edu.byu.cs.tweeter.client.cache.Cache;
 import edu.byu.cs.tweeter.client.presenter.FollowingPresenter;
 import edu.byu.cs.tweeter.client.view.main.MainActivity;
 import edu.byu.cs.tweeter.client.view.view_interface.FollowingView;
@@ -158,7 +157,7 @@ public class FollowingFragment extends Fragment implements FollowingView {
          * @param user the user.
          */
         void bindUser(User user) {
-            userAlias.setText(user.getAlias());
+            userAlias.setText(user.getUser_alias());
             userName.setText(user.getName());
             Picasso.get().load(user.getImageUrl()).into(userImage);
         }

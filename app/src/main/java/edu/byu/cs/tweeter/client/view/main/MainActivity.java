@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements StatusDialogFragm
         userName.setText(selectedUser.getName());
 
         TextView userAlias = findViewById(R.id.userAlias);
-        userAlias.setText(selectedUser.getAlias());
+        userAlias.setText(selectedUser.getUser_alias());
 
         ImageView userImageView = findViewById(R.id.userImage);
         Picasso.get().load(selectedUser.getImageUrl()).into(userImageView);
